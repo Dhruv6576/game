@@ -735,7 +735,12 @@
 
             useEffect(() => {
                 try {
-                    socketRef.current = io('http://localhost:3001', {
+                    // Determine server URL - use current origin in production, localhost in development
+                    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const serverUrl = isLocalHost ? 'http://localhost:3001' : window.location.origin;
+                    
+                    console.log('Connecting to server:', serverUrl);
+                    socketRef.current = io(serverUrl, {
                         reconnection: true,
                         reconnectionDelay: 1000,
                         reconnectionAttempts: 3
